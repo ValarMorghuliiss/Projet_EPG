@@ -1,0 +1,76 @@
+﻿@model IEnumerable<Projet_gestionStagiaire.Models.Candidat>
+
+<div class="container-fluid">
+    <div class="tab-content">
+        <div class="tab-pane active" id="Staff-all">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prenom</th>
+                                <th>Email</th>
+                                <th>Telephone</th>
+                                <th>Ville</th>
+                                <th>Universite</th>
+                                <th>Annee Universitaire</th>
+                                <th>Date de Candidature</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var demande in Model)
+                            {
+                                <tr>
+                                    <td>@demande.Nom</td>
+                                    <td>@demande.Prenom</td>
+                                    <td>@demande.Email</td>
+                                    <td>@demande.Telephone</td>
+                                    <td>@demande.Ville</td>
+                                    <td>@demande.Universite</td>
+                                    <td>
+                                        @switch (demande.AnneeUniversitaire)
+                                        {
+                                            case 1:
+                                                @:Première année
+                                                break;
+                                            case 2:
+                                                @:Deuxième année
+                                                break;
+                                            case 3:
+                                                @:Troisième année
+                                                break;
+                                            case 4:
+                                                @:Quatrième année
+                                                break;
+                                            case 5:
+                                                @:Cinquième année
+                                                break;
+                                        }
+                                    </td>
+                                    <td><strong>@demande.DateCandidature.ToString("dd MMM, yyyy")</strong></td>
+                                    <td style="display: flex; gap: 5px;">
+                                        <form asp-action="BannerCandidat" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir banner cet encadrant ?');">
+                                            <input type="hidden" name="id" value="@demande.Id" />
+                                            <button type="submit" class="btn btn-icon btn-sm" title="Banner">
+                                                <i class="fa fa-trash-o text-danger"></i>
+                                            </button>
+                                        </form>
+                                        <form asp-action="AccepterStagiare" method="get">
+                                            <input type="hidden" name="id" value="@demande.Id" />
+                                            <button type="submit" class="btn btn-icon btn-sm" title="Accepter">
+                                                <i class="fa fa-edit"></i>
+                                            </button>
+                                        </form>
+                                        <button type="button" class="btn btn-icon btn-sm" title="View"><i class="fa fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

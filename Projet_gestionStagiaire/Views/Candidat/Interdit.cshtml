@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Interdit";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="container">
+        <div class="title">@ViewData["Title"]</div>
+        <div class="content">
+            <div class="error-message">
+                <h2>Votre candidature a été refusée</h2>
+                <p>Nous avons examiné votre candidature et, malheureusement, elle a été refusée pour le moment. Nous vous encourageons à postuler de nouveau après 6 mois. Merci de votre compréhension et bonne chance pour vos futures démarches.</p>
+                <div class="button">
+                    <a href="@Url.Action("Inscription", "Candidat")" class="btn btn-primary">Retour à l'accueil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

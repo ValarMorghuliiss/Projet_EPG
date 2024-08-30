@@ -1,0 +1,77 @@
+﻿@model Projet_gestionStagiaire.Models.Candidat
+@{
+    ViewData["Title"] = "Recrutement";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="container">
+        <div class="title">@ViewData["Title"]</div>
+        <div class="content">
+            <form asp-action="Inscription">
+                <div class="user-details">
+                    <div class="input-box">
+                        <span class="details">Nom</span>
+                        <input asp-for="Nom" type="text" placeholder="Enter your name" class="form-control">
+                        <span asp-validation-for="Nom" style="color: #d9534f;"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Prenom</span>
+                        <input asp-for="Prenom" type="text" placeholder="Enter your first name" class="form-control">
+                        <span asp-validation-for="Prenom" style="color: #d9534f;"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Email</span>
+                        <input asp-for="Email" type="email" placeholder="Enter your email" class="form-control">
+                        <span asp-validation-for="Email" style="color: #d9534f;"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Ville</span>
+                        <select asp-for="Ville" class="form-control" asp-items="ViewBag.Villes">
+                            <option value="">Select city</option>
+                        </select>
+                        <span asp-validation-for="Ville" style="color: #d9534f;"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Université</span>
+                        <input asp-for="Universite" type="text" placeholder="Enter your university" class="form-control">
+                        <span asp-validation-for="Universite" style="color: #d9534f;"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Année Universitaire</span>
+                        <select asp-for="AnneeUniversitaire" class="form-control" asp-items="ViewBag.Annees">
+                            <option value="">Select year</option>
+                        </select>
+                        <span asp-validation-for="AnneeUniversitaire" style="color: #d9534f;"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Téléphone</span>
+                        <input asp-for="Telephone" type="tel" placeholder="Enter your phone number" class="form-control">
+                        <span asp-validation-for="Telephone" style="color: #d9534f;"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Numéro d'identité</span>
+                        <input asp-for="NumeroIdentite" type="text" placeholder="Enter your ID number" class="form-control">
+                        <span asp-validation-for="NumeroIdentite" style="color: #d9534f;"></span>
+                    </div>
+                    <div class="input-box">
+                        <span class="details">Domaine</span>
+                        <input asp-for="Domaine" type="text" value="Informatique" class="form-control" readonly>
+                    </div>
+                </div>
+                <div class="button">
+                    <input type="submit" value="Postuler" class="btn btn-primary">
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

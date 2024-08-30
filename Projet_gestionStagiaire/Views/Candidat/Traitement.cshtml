@@ -1,0 +1,28 @@
+﻿@{
+    ViewData["Title"] = "Traitement";
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <title>@ViewData["Title"]</title>
+    <link rel="stylesheet" href="~/css/style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div class="container">
+        <div class="title">@ViewData["Title"]</div>
+        <div class="content">
+            <div class="success-message">
+                <h2>Votre dossier est en cours de traitement</h2>
+                <p>Nous avons bien reçu votre candidature. Votre dossier est actuellement en cours de traitement. Si nous avons besoin de stagiaires, nous vous contacterons sous peu.</p>
+                <div class="button">
+                    <a href="@Url.Action("Inscription", "Candidat")" class="btn btn-primary">Retour à l'accueil</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

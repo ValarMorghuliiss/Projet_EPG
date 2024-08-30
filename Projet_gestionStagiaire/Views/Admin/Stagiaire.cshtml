@@ -1,0 +1,84 @@
+﻿@model IEnumerable<Projet_gestionStagiaire.Models.Stagiaire>
+
+<div class="container-fluid">
+    <div class="tab-content">
+        <div class="tab-pane active" id="Staff-all">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Annee Universitaire</th>
+                                <th>Email</th>
+                                <th>Telephone</th>
+                                <th>Date de Début</th>
+                                <th>Dure De Stage</th>
+                                <th>Date de Fin</th>
+                                <th>Encadrant</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var stagiaire in Model)
+                            {
+                                <tr>
+                                    <td><div class="font-15">@stagiaire.Nom</div></td>
+                                    <td><span>@stagiaire.Prenom</span></td>
+                                    <td>
+                                        @switch (stagiaire.AnneeUniversitaire)
+                                        {
+                                            case 1:
+                                                @:Première année
+                                                break;
+                                            case 2:
+                                                @:Deuxième année
+                                                break;
+                                            case 3:
+                                                @:Troisième année
+                                                break;
+                                            case 4:
+                                                @:Quatrième année
+                                                break;
+                                            case 5:
+                                                @:Cinquième année
+                                                break;
+                                        }
+                                    </td>
+                                    <td><span class="text-muted">@stagiaire.Email</span></td>
+                                    <td><span class="text-muted">@stagiaire.Telephone</span></td>
+                                    <td>@stagiaire.DateDebut.ToString("dd MMM, yyyy")</td>
+                                    <td>@stagiaire.DureDeStage Mois</td>
+                                    <td>@stagiaire.DateFin.ToString("dd MMM, yyyy")</td>
+                                    <td>@(stagiaire.Encadrant != null ? $"{stagiaire.Encadrant.Nom} {stagiaire.Encadrant.Prenom}" : "Non Assigné")</td>
+                                    <td>
+                                        @if (stagiaire.StatusStage)
+                                        {
+                                            <span class="tag tag-success">
+                                                @stagiaire.StatutAffichage
+                                            </span>
+                                        }
+                                        else
+                                        {
+                                            <span class="tag tag-warning">
+                                                @stagiaire.StatutAffichage
+                                            </span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="DeleteStagiaire" asp-route-id="@stagiaire.Id" class="btn btn-icon btn-sm"
+                                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce stagiaire ?');">
+                                            <i class="fa fa-trash-o text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

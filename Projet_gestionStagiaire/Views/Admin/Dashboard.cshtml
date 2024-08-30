@@ -1,0 +1,108 @@
+﻿
+<div class="container-fluid">
+    <div class="row clearfix row-deck">
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card">
+                <div class="card-body ribbon">
+                    <div class="ribbon-box green" data-toggle="tooltip">@ViewBag.NombreDeCandidats</div>
+                    <a href="@Url.Action("DemandeStage", "Admin")" class="my_sort_cut text-muted">
+                        <i class="fa fa-black-tie"></i>
+                        <span>Demande De Stage</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card">
+                <div class="card-body ribbon">
+                    <div class="ribbon-box orange" data-toggle="tooltip">@ViewBag.NombreStagiares</div>
+                    <a href="@Url.Action("Stagiaire", "Admin")" class="my_sort_cut text-muted">
+                        <i class="fa fa-address-book"></i>
+                        <span>Stagiaires</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card">
+                <div class="card-body ribbon">
+                    <div class="ribbon-box orange" data-toggle="tooltip">@ViewBag.NombreDeEncadrants</div>
+                    <a href="@Url.Action("Encadrant", "Admin")" class="my_sort_cut text-muted">
+                        <i class="fa fa-user-circle-o"></i>
+                        <span>Encadrants</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-6 col-md-4 col-xl-2">
+            <div class="card">
+                <div class="card-body">
+                    <a href="" class="my_sort_cut text-muted">
+                        <i class="fa fa-book"></i>
+                        <span>Archive</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row clearfix">
+        <div class="col-xl-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">EPG Report</h3>
+                    <div class="card-options">
+                        <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <canvas id="stagiairesChart" style="width:100%;max-width:600px;"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    var ctx = document.getElementById('stagiairesChart').getContext('2d');
+
+    // Définissez un tableau de couleurs pour chaque barre
+    var colors = [
+        'rgba(255, 99, 132, 0.2)',
+        'rgba(54, 162, 235, 0.2)',
+        'rgba(255, 206, 86, 0.2)',
+        'rgba(75, 192, 192, 0.2)',
+        'rgba(153, 102, 255, 0.2)',
+        'rgba(255, 159, 64, 0.2)'
+        // Ajoutez plus de couleurs si nécessaire
+    ];
+
+    var stagiairesChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(Json.Serialize(ViewBag.Villes)),
+            datasets: [{
+                label: 'Nombre de Stagiaires',
+                data: @Html.Raw(Json.Serialize(ViewBag.Counts)),
+                backgroundColor: colors, // Utilisez le tableau de couleurs
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1,
+                barPercentage: 0.8,
+                categoryPercentage: 0.9
+            }]
+        },
+        options: {
+            scales: {
+                yAxes: [{
+                    display: false // Désactive complètement l'affichage de l'axe Y
+                }]
+            }
+        }
+    });
+</script>
+
+
+
+
+
+

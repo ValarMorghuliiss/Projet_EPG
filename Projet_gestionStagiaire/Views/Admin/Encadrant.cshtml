@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Projet_gestionStagiaire.Models.Encadrant>
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center ">
+        <ul class="nav nav-tabs page-header-tab">
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Staff-all">List View</a></li>
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("CreateEncadrant", "Admin")">Add</a>
+            </li>
+        </ul>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="tab-content">
+
+        <div class="tab-pane active" id="Staff-all">
+            <div class="card">
+                <div class="table-responsive">
+                    <table class="table table-hover table-vcenter text-nowrap table-striped mb-0">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Username</th>
+                                <th>Password</th>
+                                <th>Nombre de Stagiaires</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var encadrant in Model)
+                            {
+                                // Vérifiez si la clé existe dans le dictionnaire
+                                int nombreDeStagiaires = 0;
+                                if (ViewBag.NombreDeStagiairesParEncadrant.ContainsKey(encadrant.Id))
+                                {
+                                    nombreDeStagiaires = ViewBag.NombreDeStagiairesParEncadrant[encadrant.Id];
+                                }
+
+                                <tr>
+                                    <td class="w60">
+                                        <img class="avatar" src="../assets/images/xs/avatar8.jpg" alt="">
+                                    </td>
+                                    <td><div class="font-15">@encadrant.Nom</div></td>
+                                    <td><span>@encadrant.Prenom</span></td>
+                                    <td><span>@encadrant.Username</span></td>
+                                    <td><span>@encadrant.MotDePasse</span></td>
+                                    <td>
+                                        @if (nombreDeStagiaires == 0)
+                                        {
+                                            <span class="tag tag-danger">0 stagiaire encadré</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="tag tag-success">@nombreDeStagiaires stagiaires encadrés</span>
+                                        }
+                                    </td>
+                                    <td>
+                                        <a asp-action="DeleteEncadrant" asp-route-id="@encadrant.Id" class="btn btn-icon btn-sm js-sweetalert"
+                                           onclick="return confirm('Êtes-vous sûr de vouloir supprimer cet encadrant ?');">
+                                            <i class="fa fa-trash-o text-danger"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

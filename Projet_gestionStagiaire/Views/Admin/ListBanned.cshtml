@@ -1,0 +1,58 @@
+﻿@model IEnumerable<Projet_gestionStagiaire.Models.Candidat>
+
+<div class="container-fluid">
+    <div class="tab-content">
+        <div class="tab-pane active" id="Candidat-all">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-hover text-nowrap js-basic-example dataTable table-striped table_custom border-style spacing5">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Nom Complet</th>
+                                    <th>Email</th>
+                                    <th>Telephone</th>
+                                    <th>Date de Candidature</th>
+                                    <th>Date de Fin du Bannage</th>
+                                    <th>Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var candidat in Model)
+                                {
+                                    //var dateFinBannage = candidat.DateCandidature.AddMonths(6);
+                                    var dateFinBannage = candidat.DateCandidature.AddDays(1);
+                                    var aujourdHui = DateTime.Now.Date;
+                                    <tr>
+                                        <td>@candidat.NumeroIdentite</td>
+                                        <td>@($"{candidat.Nom} {candidat.Prenom}")</td>
+                                        <td>@candidat.Email</td>
+                                        <td>@candidat.Telephone</td>
+                                        <td>@candidat.DateCandidature.ToString("dd MMM yyyy")</td>
+                                        <td>@dateFinBannage.ToString("dd MMM yyyy")</td>
+                                        <td>
+                                            @if (candidat.Status == false)
+                                            {
+                                                if (dateFinBannage.Date <= aujourdHui)
+                                                {
+                                                    <a asp-action="AnnulerBanner" asp-route-id="@candidat.Id" class="tag tag-green"
+                                                       onclick="return confirm('Êtes-vous sûr de vouloir supprimer ce candidat ?');">Banned</a>
+                                                }
+                                                else
+                                                {
+                                                    <span class="tag tag-red">Banned</span>
+                                                }
+                                            }
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

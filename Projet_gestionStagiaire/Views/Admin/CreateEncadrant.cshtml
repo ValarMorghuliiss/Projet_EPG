@@ -1,0 +1,53 @@
+﻿@model Projet_gestionStagiaire.Models.Encadrant
+
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center ">
+        <ul class="nav nav-tabs page-header-tab">
+            <li class="nav-item">
+                <a class="nav-link" href="@Url.Action("Encadrant", "Admin")">List View</a>
+            </li>
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Staff-add">Add</a></li>
+        </ul>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="tab-pane" id="Staff-add">
+        <div class="row clearfix">
+            <div class="col-lg-8 col-md-12 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="card-title">Basic Information</h3>
+                        <div class="card-options">
+                            <a href="#" class="card-options-collapse" data-toggle="card-collapse"><i class="fe fe-chevron-up"></i></a>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <form asp-action="CreateEncadrant">
+                            <div asp-validation-summary="All" class="text-danger"></div>
+                            <div class="row clearfix">
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label>First Name</label>
+                                        <input asp-for="Prenom" class="form-control" required />
+                                        <span asp-validation-for="Prenom" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-sm-12">
+                                    <div class="form-group">
+                                        <label>Last Name</label>
+                                        <input asp-for="Nom" class="form-control" required />
+                                        <span asp-validation-for="Nom" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
