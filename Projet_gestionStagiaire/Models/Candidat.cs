@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Projet_gestionStagiaire.Models
 {
@@ -50,5 +51,14 @@ namespace Projet_gestionStagiaire.Models
         [Required]
         [StringLength(50)]
         public string Domaine { get; set; }
+
+        [NotMapped]
+        public IFormFile? File { get; set; }
+
+        public string? FilePath { get; set; }
+
+        [NotMapped]
+        public IFormFile? Pdf { get; set; }
+        public string? PdfPath { get; set; }
     }
 }

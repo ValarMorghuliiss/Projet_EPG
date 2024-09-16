@@ -1,0 +1,47 @@
+﻿@{
+    ViewData["Nom"] = ViewBag.EncadrantNom;
+}
+@model IEnumerable<Projet_gestionStagiaire.Models.Inbox>
+
+<div class="container-fluid">
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="Primary">
+            <div class="accordion" id="accordionExample">
+                @foreach (var message in (IEnumerable<Projet_gestionStagiaire.Models.Inbox>)ViewBag.Messages)
+                {
+                    var messageParts = message.Corps.Split(new[] { "a été confirmé et vous est maintenant assigné en tant qu'encadrant" }, StringSplitOptions.None);
+                    var buttonText = messageParts[0];
+                    var spanText = "a été confirmé et vous est maintenant assigné en tant qu'encadrant";
+
+                    <div class="card inbox @(message.StatusDeInbox ? "" : "unread")">
+                        <div class="card-header" id="headingOne">
+                            <label class="custom-control custom-checkbox custom-control-inline mr-0">
+                                <input type="checkbox" class="custom-control-input" name="example-checkbox1" value="option1" @(message.StatusDeInbox ? "checked" : "") disabled />
+                                <span class="custom-control-label">&nbsp;</span>
+                            </label>
+                            <a href="javascript:void(0);" class="mail-star xs-hide"><i class="fa fa-star-o"></i></a>
+                            <h5 class="mb-0">
+                                <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">@buttonText</button>
+                            </h5>
+                            <span class="text_ellipsis xs-hide">@spanText</span>
+                            <div class="card-options">
+                                <form asp-action="MarkAsRead" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@message.Id" />
+                                    <button type="submit" class="btn btn-link text-muted" title="Marquer comme lu">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                </form>
+                                <form asp-action="DeleteMessage" method="post" style="display:inline;">
+                                    <input type="hidden" name="id" value="@message.Id" />
+                                    <button type="submit" class="btn btn-link text-muted" title="Supprimer">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>

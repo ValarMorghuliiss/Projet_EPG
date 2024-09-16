@@ -1,0 +1,116 @@
+﻿@model Tache
+@{
+    ViewData["Nom"] = ViewBag.EncadrantNom;
+}
+<div class="container-fluid">
+
+    <div class="timeline_item ">
+        <img class="tl_avatar" src="../assets/images/xs/avatar1.jpg" alt="" />
+        <span><a href="javascript:void(0);">@Model.Titre</a>
+            <small class="float-right text-right">
+            @Model.DateDebut.ToString("dd-MMMM-yyyy") - @Model.DateFin.ToString("dd-MMMM-yyyy")
+            </small>
+        </span>
+        <div class="msg">
+            <p>@Model.Description</p>
+        </div>
+    </div>
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Recently Accessed Files</h3>
+        </div>
+        <div class="card-body">
+            <div class="file_folder">
+                <a href="javascript:void(0);">
+                    <div class="icon">
+                        <i class="fa fa-folder text-success"></i>
+                    </div>
+                    <div class="file-name">
+                        <p class="mb-0 text-muted">Family</p>
+                        <small>3 File, 1.2GB</small>
+                    </div>
+                </a>
+                <a href="javascript:void(0);">
+                    <div class="icon">
+                        <i class="fa fa-file-word-o text-primary"></i>
+                    </div>
+                    <div class="file-name">
+                        <p class="mb-0 text-muted">Report2017.doc</p>
+                        <small>Size: 68KB</small>
+                    </div>
+                </a>
+                <a href="javascript:void(0);">
+                    <div class="icon">
+                        <i class="fa fa-file-pdf-o text-danger"></i>
+                    </div>
+                    <div class="file-name">
+                        <p class="mb-0 text-muted">Report2017.pdf</p>
+                        <small>Size: 68KB</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="col-lg-12 col-md-12">
+            <div class="card">
+                <div class="card-header bline">
+                    <h3 class="card-title">Task Chat <small>Last seen: 2 hours ago</small></h3>
+                </div>
+                <div class="card-body chat_windows">
+                    <ul class="chat-list mb-0">
+                        <li class="other-message">
+                            <img class="avatar mr-3" src="~/assets/images/xs/avatar2.jpg" alt="avatar">
+                            <div class="message">
+                                <p class="bg-light-blue">Are we meeting today?</p>
+                                <span class="time">10:10 AM, Today</span>
+                            </div>
+                        </li>
+                        <li class="other-message">
+                            <img class="avatar mr-3" src="~/assets/images/xs/avatar3.jpg" alt="avatar">
+                            <div class="message">
+                                <p class="bg-light-cyan">Hi Aiden, how are you? How is the project coming along?</p>
+                                <p class="bg-light-cyan">Are we meeting today?</p>
+                                <span class="time">10:15 AM, Today</span>
+                            </div>
+                        </li>
+                        <li class="my-message">
+                            <div class="message">
+                                <p class="bg-light-gray">Project has been already finished and I have results to show you.</p>
+                                <div class="file_folder">
+                                    <a href="javascript:void(0);">
+                                        <div class="icon">
+                                            <i class="fa fa-file-excel-o text-success"></i>
+                                        </div>
+                                        <div class="file-name">
+                                            <p class="mb-0 text-muted">Report2017.xls</p>
+                                            <small>Size: 68KB</small>
+                                        </div>
+                                    </a>
+                                    <a href="javascript:void(0);">
+                                        <div class="icon">
+                                            <i class="fa fa-file-word-o text-primary"></i>
+                                        </div>
+                                        <div class="file-name">
+                                            <p class="mb-0 text-muted">Report2017.doc</p>
+                                            <small>Size: 68KB</small>
+                                        </div>
+                                    </a>
+                                </div>
+                                <span class="time">10:17 AM, Today</span>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="chat-message clearfix">
+                        <div class="input-group mb-0">
+                            <input type="text" class="form-control" placeholder="Enter text here...">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

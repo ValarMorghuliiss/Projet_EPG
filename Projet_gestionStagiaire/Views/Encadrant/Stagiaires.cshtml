@@ -1,0 +1,55 @@
+﻿@model IEnumerable<Projet_gestionStagiaire.Models.Stagiaire>
+@{
+    ViewData["Nom"] = ViewBag.EncadrantNom;
+}
+<div class="container-fluid">
+    <div class="row">
+        @foreach (var stagiaire in Model)
+
+        {
+            <div class="col-xl-3 col-lg-4 col-md-6">
+                <div class="card">
+                    <div class="card-body text-center @(stagiaire.SujetDeStage != null ? "ribbon" : "")">
+                        @if (stagiaire.SujetDeStage != null)
+
+                        {
+                            <div class="ribbon-box green" data-toggle="tooltip" title="Permanent">
+                                <i class="fa fa-star"></i>
+                            </div>
+                        }
+                        <img class="card-profile-img" src="@stagiaire.FilePath" alt="">
+                        <h5 class="mb-0">@stagiaire.Nom @stagiaire.Prenom</h5>
+                        <span>@stagiaire.Nom</span>
+                        <div class="text-muted">@stagiaire.Telephone</div>
+                        <p class="mb-4 mt-3">@stagiaire.Telephone</p>
+                        <span>
+                            @if (stagiaire.SujetDeStage != null)
+
+                            {
+                                @using (Html.BeginForm("Taches", "Encadrant", FormMethod.Get))
+
+                                {
+                                    @Html.Hidden("stagiaireId", stagiaire.Id)
+                                    @Html.Hidden("sujetDeStageId", stagiaire.SujetDeStage.Id)
+                                    <button type="submit" class="btn btn-primary">
+                                        @stagiaire.SujetDeStage.Titre
+                                    </button>
+                                }                            }
+
+                            else
+
+                            {
+                                @using (Html.BeginForm("ShowAssignSubject", "Encadrant", FormMethod.Get))
+
+                                {
+                                    @Html.Hidden("stagiaireId", stagiaire.Id)
+                                    <button type="submit" class="btn btn-primary">Assigner un sujet</button>
+                                }
+                            }
+                        </span>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

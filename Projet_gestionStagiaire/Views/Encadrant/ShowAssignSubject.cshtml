@@ -1,0 +1,30 @@
+﻿@{
+    var stagiaire = ViewBag.Stagiaire as Projet_gestionStagiaire.Models.Stagiaire;
+    var sujetsDeStage = ViewBag.SujetsDeStage as List<Projet_gestionStagiaire.Models.SujetDeStage>;
+    ViewData["Nom"] = ViewBag.EncadrantNom;
+
+}
+
+<h2>Assigner un sujet à @stagiaire.Nom @stagiaire.Prenom</h2>
+
+<form asp-action="AssignSubject" asp-controller="Encadrant" method="post">
+    @Html.Hidden("stagiaireId", stagiaire.Id)
+
+    <div class="mb-3">
+        <label for="stagiaireName" class="form-label">Nom du Stagiaire</label>
+        <input type="text" id="stagiaireName" class="form-control" value="@stagiaire.Nom @stagiaire.Prenom" readonly />
+    </div>
+
+    <div class="mb-3">
+        <label for="sujetDeStageDropdown" class="form-label">Sélectionner un Sujet de Stage</label>
+        <select name="sujetDeStageId" id="sujetDeStageDropdown" class="form-select">
+            @foreach (var sujet in sujetsDeStage)
+            {
+                <option value="@sujet.Id">@sujet.Titre</option>
+            }
+        </select>
+    </div>
+
+    <button type="submit" class="btn btn-success">Affecter</button>
+    <a href="@Url.Action("Stagiaires", "Encadrant")" class="btn btn-secondary">Annuler</a>
+</form>

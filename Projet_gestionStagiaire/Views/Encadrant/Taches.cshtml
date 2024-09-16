@@ -1,0 +1,120 @@
+﻿@{
+    ViewData["Nom"] = ViewBag.EncadrantNom;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center">
+        <ul class="nav nav-tabs page-header-tab">
+            <li class="nav-item">
+                <a class="nav-link active" id="TaskBoard-tab">Task List</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link " id="TaskBoard-tab">AddTask</a>
+            </li>
+
+        </ul>
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="tab-content">
+        <div class="tab-pane active" id="TaskBoard-all">
+            <div class="row clearfix mt-2">
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h6>Planned</h6>
+                            <input type="text" class="knob" value="@ViewBag.PlannedTasks" data-width="90" data-height="90" data-thickness="0.1" data-fgColor="#2185d0">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h6>In progress</h6>
+                            <input type="text" class="knob" value="@ViewBag.InProgressTasks" data-width="90" data-height="90" data-thickness="0.1" data-fgColor="#f2711c">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="card">
+                        <div class="card-body text-center">
+                            <h6>Completed</h6>
+                            <input type="text" class="knob" value="@ViewBag.CompletedTasks" data-width="90" data-height="90" data-thickness="0.1" data-fgColor="#21ba45">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="table-responsive">
+                <div class="mb-3">
+                    <a href="@Url.Action("AjouterTache", new { stagiaireId = ViewBag.StagiaireId, sujetDeStageId = ViewBag.SujetDeStageId })" class="btn btn-primary">
+                        Add Task
+                    </a>
+                </div>
+                <table class="table table-hover table-vcenter mb-0 table_custom spacing8 text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>Task</th>
+                            <th>Duration</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @if (ViewBag.Taches != null)
+                        {
+                            foreach (var tache in ViewBag.Taches)
+                            {
+                                <tr>
+                                    <td>
+                                        <h6 class="mb-0">@tache.Titre</h6>
+                                    </td>
+                                    <td>
+                                        <div class="text-info">Start: @tache.DateDebut.ToString("dd MMM yyyy")</div>
+                                        <div class="text-pink">End: @tache.DateFin.ToString("dd MMM yyyy")</div>
+                                    </td>
+                                    <td>
+                                        @if (tache.EstTerminee)
+                                        {
+                                            <span class="tag tag-green">Completed</span>
+                                        }
+                                        else if (DateTime.Today < tache.DateDebut.Date)
+                                        {
+                                            <span class="tag tag-cyan">Planned</span>
+                                        }
+                                        else
+                                        {
+                                            <span class="tag tag-orange">In progress</span>
+                                        }
+                                        <form asp-action="DeleteTask" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette tâche ?');" class="d-inline">
+                                            <input type="hidden" name="id" value="@tache.Id" />
+                                            <input type="hidden" name="stagiaireId" value="@ViewBag.StagiaireId" />
+                                            <input type="hidden" name="sujetDeStageId" value="@ViewBag.SujetDeStageId" />
+                                            <button type="submit" class="btn btn-danger btn-sm" title="Delete">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </form>
+                                        <a href="@Url.Action("TachDetails", new { id = tache.Id })" class="btn btn-icon btn-sm" title="View">
+                                            <i class="fa fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                        else
+                        {
+                            <tr>
+                                <td colspan="4" class="text-center">No tasks available.</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+
+
+
+        </div>
+    </div>
+</div>

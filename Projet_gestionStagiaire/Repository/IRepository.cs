@@ -12,5 +12,7 @@ namespace Projet_gestionStagiaire.Repository
         Task<T> FindAsync(Expression<Func<T, bool>> predicate);
         Task SaveChangesAsync();
         Task<IEnumerable<T>> GetAllWithIncludesAsync(params Expression<Func<T, object>>[] includeProperties);
+        Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate);
+
     }
 }

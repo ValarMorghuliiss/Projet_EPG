@@ -14,7 +14,17 @@ builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
 builder.Services.AddSingleton<CityService>();
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddScoped<InboxService, InboxService>();
 
+
+builder.Services.AddSession(options =>
+{
+    options.IdleTimeout = TimeSpan.FromMinutes(30);
+    options.Cookie.HttpOnly = true;
+    options.Cookie.IsEssential = true;
+});
+
+builder.Services.AddScoped<EmailService>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -26,11 +36,14 @@ if (!app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 app.UseStaticFiles();
 
 app.UseRouting();
 
 app.UseAuthorization();
+
+app.UseSession();
 
 app.MapControllerRoute(
     name: "default",

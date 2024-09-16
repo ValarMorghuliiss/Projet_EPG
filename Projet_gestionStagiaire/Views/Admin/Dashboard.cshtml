@@ -45,14 +45,74 @@
             </div>
         </div>
     </div>
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">EPG Stats</h3>
+        </div>
+        <div class="card-body">
+            <div class="row text-center">
+                <div class="col-lg-4 col-sm-12 border-right">
+                    <label class="mb-0 font-10">Encadrant</label>
+                    <h4 class="font-20 font-weight-bold">@ViewBag.NombreDeEncadrants</h4>
+                </div>
+                <div class="col-lg-4 col-sm-12 border-right">
+                    <label class="mb-0 font-10">Total Stagiaires</label>
+                    <h4 class="font-20 font-weight-bold">@ViewBag.NombreStagiares</h4>
+                </div>
+                <div class="col-lg-4 col-sm-12">
+                    <label class="mb-0 font-10">Total Archives</label>
+                    <h4 class="font-20 font-weight-bold">Mazal ma derenah</h4>
+                </div>
+            </div>
+            <table class="table table-striped mt-4">
+                <tbody>
+                    @foreach (var niveau in ViewBag.StagiairesParNiveau)
+                    {
+                        <tr>
+                            <td>
+                                <label class="d-block">
+                                    @if (niveau.Niveau == 1)
+                                    {
+                                        @:Première année
+                                    }
+                                    else if (niveau.Niveau == 2)
+                                    {
+                                        @:Deuxième année
+                                    }
+                                    else if (niveau.Niveau == 3)
+                                    {
+                                        @:Troisième année
+                                    }
+                                    else if (niveau.Niveau == 4)
+                                    {
+                                        @:Quatrième année
+                                    }
+                                    else if (niveau.Niveau == 5)
+                                    {
+                                        @:Cinquième année
+                                    }
+
+                                    <span class="float-right">@niveau.Pourcentage%</span>
+                                </label>
+                                <div class="progress progress-xs">
+                                    <div class="progress-bar bg-cyan" role="progressbar" aria-valuenow="@niveau.Pourcentage" aria-valuemin="0" aria-valuemax="100" style="width: @niveau.Pourcentage%"></div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
     <div class="row clearfix">
         <div class="col-xl-12">
             <div class="card">
                 <div class="card-header">
                     <h3 class="card-title">EPG Report</h3>
-                    <div class="card-options">
-                        <a href="#" class="card-options-fullscreen" data-toggle="card-fullscreen"><i class="fe fe-maximize"></i></a>
-                    </div>
                 </div>
                 <div class="card-body">
                     <canvas id="stagiairesChart" style="width:100%;max-width:600px;"></canvas>
@@ -60,6 +120,10 @@
             </div>
         </div>
     </div>
+
+
+
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

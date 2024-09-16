@@ -1,0 +1,51 @@
+﻿@{
+    ViewData["Nom"] = ViewBag.EncadrantNom;
+}
+
+<div class="container-fluid">
+    <div class="d-flex justify-content-between align-items-center">
+        <ul class="nav nav-tabs page-header-tab">
+            <li class="nav-item"><a class="nav-link "  href="@Url.Action("SujetdeStage", "Encadrant")">List View</a></li>
+            <li class="nav-item"><a class="nav-link active" data-toggle="tab" href="#Courses-add">Add</a></li>
+        </ul>
+    </div>
+</div>
+<div class="tab-pane active" id="Courses-add">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Ajouter un sujet de stage</h3>
+        </div>
+        <div class="card-body">
+            <form method="post" action="/Encadrant/AjouterSujetDestage">
+                <div class="row clearfix">
+                    <!-- Titre du sujet de stage -->
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <input type="text" name="Titre" class="form-control" placeholder="Titre du sujet de stage" required>
+                        </div>
+                    </div>
+
+                    <!-- Durée du stage -->
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <input type="number" name="Duree" class="form-control" placeholder="Durée du stage (en semaines)" required>
+                        </div>
+                    </div>
+
+                    <!-- Description du sujet de stage -->
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <textarea name="Description" rows="4" class="form-control no-resize" placeholder="Description du sujet de stage" required></textarea>
+                        </div>
+                    </div>
+
+                    <!-- Boutons d'action -->
+                    <div class="col-sm-12">
+                        <button type="submit" class="btn btn-primary">Soumettre</button>
+                        <button type="reset" class="btn btn-outline-secondary btn-default">Annuler</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

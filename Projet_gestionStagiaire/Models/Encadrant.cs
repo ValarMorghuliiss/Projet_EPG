@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Projet_gestionStagiaire.Models
 {
@@ -19,8 +20,7 @@ namespace Projet_gestionStagiaire.Models
         [StringLength(100)]
         public string MotDePasse { get; set; }
 
-        [Required]
-        [StringLength(50)]
+        [NotMapped]
         public string Username
         {
             get
@@ -47,7 +47,12 @@ namespace Projet_gestionStagiaire.Models
 
             return new string(motDePasse);
         }
+        [Required]
+        [EmailAddress]
+        public string Email { get; set; }  // Nouvelle propriété
 
         public ICollection<Stagiaire>? Stagiaires { get; set; }
+
+        public ICollection<SujetDeStage>? SujetsDeStage { get; set; }
     }
 }

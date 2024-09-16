@@ -62,12 +62,27 @@ namespace Projet_gestionStagiaire.Models
         [Required]
         public int DureDeStage { get; set; }
 
+
+
+        public string? FilePath { get; set; }
+        public string? PdfPath { get; set; }
+
         // Relation avec Encadrant
         [Required]
         public int EncadrantId { get; set; }
 
         [ForeignKey("EncadrantId")]
         public Encadrant Encadrant { get; set; }
+
+        public int? SujetDeStageId { get; set; }
+
+        // Navigation property for SujetDeStage
+        [ForeignKey("SujetDeStageId")]
+        public SujetDeStage? SujetDeStage { get; set; }
+
+        public ICollection<Tache>? Taches { get; set; } = new List<Tache>();
+
+
 
         [NotMapped]
         public DateTime DateFin => DateDebut.AddMonths(DureDeStage);

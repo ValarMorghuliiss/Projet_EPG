@@ -59,5 +59,10 @@ namespace Projet_gestionStagiaire.Repository
             }
             return await query.ToListAsync();
         }
+
+        public async Task<IEnumerable<T>> FindAllAsync(Expression<Func<T, bool>> predicate)
+        {
+            return await _dbSet.Where(predicate).ToListAsync();
+        }
     }
 }

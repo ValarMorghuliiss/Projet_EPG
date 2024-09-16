@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Projet_gestionStagiaire.Data;
 using Projet_gestionStagiaire.Migrations;
 using Projet_gestionStagiaire.Models;
 using Projet_gestionStagiaire.Repository;
@@ -17,14 +19,23 @@ namespace Projet_gestionStagiaire.Controllers
         private readonly IRepository<Candidat> _candidatRepository;
         private readonly IRepository<Encadrant> _encadrantRepository;
         private readonly IRepository<Stagiaire> _stagiaireRepository;
-        public AdminController(IRepository<Admin> adminRepository, IRepository<Candidat> candidatRepository, IRepository<Encadrant> encadrantRepository, IRepository<Stagiaire> stagiaireRepository)
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly EmailService _emailService;
+        private readonly InboxService _inboxService;
+
+
+
+        public AdminController(InboxService inboxService,EmailService emailService, IRepository<Admin> adminRepository, IRepository<Candidat> candidatRepository, IRepository<Encadrant> encadrantRepository, IRepository<Stagiaire> stagiaireRepository, IWebHostEnvironment webHostEnvironment)
         {
             _adminRepository = adminRepository;
             _candidatRepository = candidatRepository;
             _encadrantRepository = encadrantRepository;
             _stagiaireRepository = stagiaireRepository;
+            _webHostEnvironment = webHostEnvironment;
+            _emailService = emailService;
+            _inboxService = inboxService;
         }
-       
+
         public IActionResult Login()
         {
             return View();
@@ -62,6 +73,14 @@ namespace Projet_gestionStagiaire.Controllers
                                                    Count = group.Count()
                                                }).ToList();
 
+            var stagiairesParNiveau = stagiaires.GroupBy(s => s.AnneeUniversitaire)
+                                    .Select(group => new
+                                    {
+                                        Niveau = group.Key,
+                                        Count = group.Count(),
+                                        Pourcentage = (group.Count() * 100) / nombreStagiares
+                                    }).ToList();
+
 
             ViewBag.Villes = stagiairesParVille.Select(s => s.Ville).ToArray();
             ViewBag.Counts = stagiairesParVille.Select(s => s.Count).ToArray();
@@ -70,6 +89,7 @@ namespace Projet_gestionStagiaire.Controllers
             ViewBag.NombreDeEncadrants = nombreDeEncadrants;
             ViewBag.NombreDeCandidats = candidatsAvecStatutTrue;
             ViewBag.StagiairesParVille = stagiairesParVille;
+            ViewBag.StagiairesParNiveau = stagiairesParNiveau;
 
 
 
@@ -144,6 +164,9 @@ namespace Projet_gestionStagiaire.Controllers
             {
                 await _encadrantRepository.AddAsync(encadrant);
                 await _encadrantRepository.SaveChangesAsync();
+
+                await _emailService.SendWelcomeEmailAsync(encadrant.Email, encadrant.Username, encadrant.MotDePasse);
+
                 return RedirectToAction("Encadrant");
             }
             return View(encadrant);
@@ -195,6 +218,8 @@ namespace Projet_gestionStagiaire.Controllers
                     AnneeUniversitaire = candidat.AnneeUniversitaire,
                     Universite = candidat.Universite,
                     DateDebut = dateDebut,
+                    FilePath = candidat.FilePath,
+                    PdfPath = candidat.PdfPath,
                     DureDeStage = DureDeStage,
                     EncadrantId = encadrantId
                 };
@@ -204,6 +229,12 @@ namespace Projet_gestionStagiaire.Controllers
 
                 _candidatRepository.Delete(candidat);
                 await _candidatRepository.SaveChangesAsync();
+
+                var encadrant = await _encadrantRepository.GetByIdAsync(encadrantId);
+                string destinataire = encadrant.Username;
+                string corps = $"{stagiaire.Prenom} {stagiaire.Nom} a été confirmé et vous est maintenant assigné en tant qu'encadrant";
+                await _inboxService.AjouterMessageAsync(destinataire, corps);
+
 
                 return RedirectToAction("Dashboard");
             }
@@ -281,10 +312,61 @@ namespace Projet_gestionStagiaire.Controllers
             var stagiaire = await _stagiaireRepository.GetByIdAsync(id);
             if (stagiaire != null)
             {
+                // Obtenez le répertoire de base wwwroot
+                var webRootPath = _webHostEnvironment.WebRootPath;
+
+                // Chemins complets des fichiers à supprimer
+                var imageFilePath = Path.Combine(webRootPath, stagiaire.FilePath.TrimStart('/'));
+                var pdfFilePath = Path.Combine(webRootPath, stagiaire.PdfPath.TrimStart('/'));
+
+                // Journaliser les chemins pour vérification
+                Console.WriteLine($"Chemin du fichier image : {imageFilePath}");
+                Console.WriteLine($"Chemin du fichier PDF : {pdfFilePath}");
+
+                // Supprimer le fichier image s'il existe
+                if (System.IO.File.Exists(imageFilePath))
+                {
+                    try
+                    {
+                        System.IO.File.Delete(imageFilePath);
+                        Console.WriteLine($"Fichier image supprimé : {imageFilePath}");
+                    }
+                    catch (Exception ex)
+                    {
+                        // Journaliser l'erreur
+                        Console.WriteLine($"Erreur lors de la suppression du fichier image : {ex.Message}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Le fichier image n'existe pas : {imageFilePath}");
+                }
+
+                // Supprimer le fichier PDF s'il existe
+                if (System.IO.File.Exists(pdfFilePath))
+                {
+                    try
+                    {
+                        System.IO.File.Delete(pdfFilePath);
+                        Console.WriteLine($"Fichier PDF supprimé : {pdfFilePath}");
+                    }
+                    catch (Exception ex)
+                    {
+                        // Journaliser l'erreur
+                        Console.WriteLine($"Erreur lors de la suppression du fichier PDF : {ex.Message}");
+                    }
+                }
+                else
+                {
+                    Console.WriteLine($"Le fichier PDF n'existe pas : {pdfFilePath}");
+                }
+
+                // Supprimer le stagiaire de la base de données
                 _stagiaireRepository.Delete(stagiaire);
                 await _stagiaireRepository.SaveChangesAsync();
             }
 
+            // Rediriger vers la vue des stagiaires
             return RedirectToAction("Stagiaire");
         }
 

@@ -67,6 +67,9 @@ namespace Projet_gestionStagiaire.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Nom")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -76,6 +79,9 @@ namespace Projet_gestionStagiaire.Migrations
                         .IsRequired()
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("PdfPath")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Prenom")
                         .IsRequired()
@@ -112,6 +118,10 @@ namespace Projet_gestionStagiaire.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MotDePasse")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -119,17 +129,41 @@ namespace Projet_gestionStagiaire.Migrations
 
                     b.Property<string>("Nom")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.Property<string>("Prenom")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
                     b.ToTable("Encadrants");
+                });
+
+            modelBuilder.Entity("Projet_gestionStagiaire.Models.Inbox", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Corps")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Destinataire")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("StatusDeInbox")
+                        .HasColumnType("bit");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Inboxs");
                 });
 
             modelBuilder.Entity("Projet_gestionStagiaire.Models.Stagiaire", b =>
@@ -156,6 +190,9 @@ namespace Projet_gestionStagiaire.Migrations
                     b.Property<int>("EncadrantId")
                         .HasColumnType("int");
 
+                    b.Property<string>("FilePath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MotDePasse")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -164,12 +201,18 @@ namespace Projet_gestionStagiaire.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("PdfPath")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Prenom")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("StatusStage")
                         .HasColumnType("bit");
+
+                    b.Property<int?>("SujetDeStageId")
+                        .HasColumnType("int");
 
                     b.Property<string>("Telephone")
                         .IsRequired()
@@ -187,7 +230,82 @@ namespace Projet_gestionStagiaire.Migrations
 
                     b.HasIndex("EncadrantId");
 
+                    b.HasIndex("SujetDeStageId");
+
                     b.ToTable("Stagiaires");
+                });
+
+            modelBuilder.Entity("Projet_gestionStagiaire.Models.SujetDeStage", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<int>("Duree")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EncadrantId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EncadrantId");
+
+                    b.ToTable("SujetsDeStage");
+                });
+
+            modelBuilder.Entity("Projet_gestionStagiaire.Models.Tache", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateDebut")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DateFin")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<bool>("EstTerminee")
+                        .HasColumnType("bit");
+
+                    b.Property<int?>("StagiaireId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SujetDeStageId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Titre")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("StagiaireId");
+
+                    b.HasIndex("SujetDeStageId");
+
+                    b.ToTable("Taches");
                 });
 
             modelBuilder.Entity("Projet_gestionStagiaire.Models.Stagiaire", b =>
@@ -198,12 +316,60 @@ namespace Projet_gestionStagiaire.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Projet_gestionStagiaire.Models.SujetDeStage", "SujetDeStage")
+                        .WithMany("Stagiaires")
+                        .HasForeignKey("SujetDeStageId");
+
                     b.Navigation("Encadrant");
+
+                    b.Navigation("SujetDeStage");
+                });
+
+            modelBuilder.Entity("Projet_gestionStagiaire.Models.SujetDeStage", b =>
+                {
+                    b.HasOne("Projet_gestionStagiaire.Models.Encadrant", "Encadrant")
+                        .WithMany("SujetsDeStage")
+                        .HasForeignKey("EncadrantId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Encadrant");
+                });
+
+            modelBuilder.Entity("Projet_gestionStagiaire.Models.Tache", b =>
+                {
+                    b.HasOne("Projet_gestionStagiaire.Models.Stagiaire", "Stagiaire")
+                        .WithMany("Taches")
+                        .HasForeignKey("StagiaireId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("Projet_gestionStagiaire.Models.SujetDeStage", "SujetDeStage")
+                        .WithMany("Taches")
+                        .HasForeignKey("SujetDeStageId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Stagiaire");
+
+                    b.Navigation("SujetDeStage");
                 });
 
             modelBuilder.Entity("Projet_gestionStagiaire.Models.Encadrant", b =>
                 {
                     b.Navigation("Stagiaires");
+
+                    b.Navigation("SujetsDeStage");
+                });
+
+            modelBuilder.Entity("Projet_gestionStagiaire.Models.Stagiaire", b =>
+                {
+                    b.Navigation("Taches");
+                });
+
+            modelBuilder.Entity("Projet_gestionStagiaire.Models.SujetDeStage", b =>
+                {
+                    b.Navigation("Stagiaires");
+
+                    b.Navigation("Taches");
                 });
 #pragma warning restore 612, 618
         }
